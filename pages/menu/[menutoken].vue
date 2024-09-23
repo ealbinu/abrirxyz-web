@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const route = useRoute()
 
-const { data: rest } = await useFetch('https://abrir.pockethost.io/m/' + route.params.menutoken)
+const { data: rest } = await useFetch('https://abrir.pockethost.io/m/' + route.params.menutoken.toUpperCase())
 
 
 import { animate } from "motion"
