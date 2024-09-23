@@ -1,27 +1,43 @@
 {
-    "editor.tabSize": 4,
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
-    },
-    "[javascript]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.formatOnSave": true
-    },
-    "[yaml]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.tabSize": 2
-    },
-    "[toml]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.tabSize": 2
-    },
-    "[markdown]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode",
-        "editor.tabSize": 2
-    },
-    "typescript.tsdk": "node_modules/typescript/lib",
-    "files.associations": {
-        "*.css": "tailwindcss",
-    }
+  "editor.tabSize": 4,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "workbench.colorCustomizations": {
+    "titleBar.activeBackground": "#e83e6b",
+    "titleBar.activeForeground": "#000000",
+    "titleBar.inactiveBackground": "#e83e6b",
+    "titleBar.inactiveForeground": "#000000",
+    "titleBar.border": "#e83e6b",
+    "activityBar.background": "#e83e6b",
+    "activityBar.foreground": "#000000",
+    "statusBar.background": "#e83e6b",
+    "statusBar.foreground": "#000000",
+    "statusBar.debuggingBackground": "#e83e6b",
+    "statusBar.debuggingForeground": "#000000",
+    "tab.activeBorder": "#e83e6b",
+    "iLoveWorkSpaceColors": true,
+    "iLoveWorkSpaceRandom": false
+  }
 }

@@ -1,0 +1,321 @@
+<script setup lang="ts">
+
+const { data: rest } = await useFetch('https://abrir.pockethost.io/m/AMOLE')
+
+
+import { animate } from "motion"
+import { isClient } from '@vueuse/shared'
+
+const route = useRoute()
+
+
+
+
+
+
+
+const navviewEl = ref<HTMLElement | null>(null)
+const navigationEl = ref<HTMLElement | null>(null)
+const navBtnEl = ref<HTMLElement | null>(null)
+const navibtnparent = ref<HTMLElement | null>(null)
+const preloader = ref<HTMLElement | null>(null)
+
+const navActive = ref(0)
+const navView = ref(false)
+
+
+
+
+
+const selectNavActive = (index) => {
+    if (index == 99) {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+        navActive.value = 0
+    } else {
+        navActive.value = index
+        document.getElementById("cat_" + index).scrollIntoView();
+    }
+    closeNavView()
+}
+
+
+
+
+const { isSwiping: navviewIsSwiping, direction: navviewDirection } = useSwipe(navviewEl)
+
+watch(
+    navviewDirection,
+    (nV, oV) => {
+        if (nV == 'up') {
+            closeNavView()
+        }
+    })
+
+const openNavView = () => {
+    nextTick(() => {
+        animate(navviewEl.value, { y: [-window.innerHeight, 0] }, { duration: 0.4 })
+        document.body.classList.add('overflow-hidden')
+    })
+    navView.value = true
+}
+const closeNavView = () => {
+    animate(navviewEl.value, { y: [0, -window.innerHeight] }, { duration: 0.6 }).finished.then(() => {
+        navView.value = false;
+        document.body.classList.remove('overflow-hidden')
+    },);
+}
+
+const formatCurrency = (value) => {
+    return new Intl.NumberFormat('es-MX', {
+        style: 'currency',
+        currency: 'MXN',
+    }).format(value);
+};
+
+
+
+const loadFonts = async () => {
+    const WebFont = await import('webfontloader');
+    if (rest.value.style.fonts.length) {
+        WebFont.load({
+            google: { families: rest.value.style.fonts }
+        });
+        document.documentElement.style.setProperty('--menu-font1', rest.value.style.fonts[0]);
+        document.documentElement.style.setProperty('--menu-font2', rest.value.style.fonts[1]);
+    }
+}
+
+const loadColors = () => {
+    document.documentElement.style.setProperty('--menu-color1', rest.value.style.colors[0]);
+    document.documentElement.style.setProperty('--menu-color2', rest.value.style.colors[1]);
+    document.documentElement.style.setProperty('--menu-color3', rest.value.style.colors[2]);
+    console.log(document.documentElement.style, rest.value.style.colors[0])
+}
+
+
+const preloading = ref(true)
+
+var lastLoadTime = 0;
+const checkloader = () => {
+    lastLoadTime = performance.now();
+    // Start a timer to check after 500ms
+    setTimeout(() => {
+        let currentTime = performance.now();
+        let timeDiff = currentTime - lastLoadTime;
+        if (timeDiff >= 500) {
+            console.log("All loaded");
+            animate(preloader.value, { y: [-window.innerHeight], opacity: 0 }, { duration: .8 }).finished.then(() => {
+                preloading.value = false
+            })
+        } else {
+            console.log("Loading...");
+        }
+    }, 500);
+
+}
+
+
+function handleIntersection(entries, observer) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            console.log(`Entered viewport: ${entry.target.id}`);
+            let catindex = entry.target.id.replace('cat_', '')
+            navActive.value = catindex
+        }
+    });
+}
+const scrollObserver = () => {
+    const observer = new IntersectionObserver(handleIntersection, {
+        root: null,
+        threshold: 0.3
+    });
+    document.querySelectorAll('.categorysection').forEach(section => {
+        observer.observe(section);
+    });
+}
+
+
+const isFontSize = ref(false)
+const fontsizer = () => {
+    if (!isFontSize.value) {
+        document.documentElement.style.fontSize = '20px';
+        isFontSize.value = true
+    } else {
+        document.documentElement.style.fontSize = '';
+        isFontSize.value = false
+    }
+}
+
+const { share, isSupported } = useShare()
+const shareit = () => {
+    console.log(share, isSupported.value)
+    share({
+        title: rest.value.name,
+        text: 'Menú digital',
+        url: isClient ? location.href : '',
+    })
+}
+
+
+const startIntersectionO = () => {
+    new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) {
+            navBtnEl.value.classList.add('fixed', 'sided')
+            animate(navBtnEl.value, { x: [200, 0] }, { duration: .8 })
+        } else {
+            navBtnEl.value.classList.remove('fixed', 'sided')
+
+        }
+    }).observe(navigationEl.value);
+}
+
+
+
+const startMounting = async () => {
+
+    loadFonts();
+    loadColors();
+    checkloader();
+    scrollObserver();
+    startIntersectionO();
+
+};
+
+onMounted(() => {
+    startMounting();
+});
+
+
+
+</script>
+
+<template>
+
+    <div class="fixed bg-white inset-0 flex justify-center items-center z-50 flex-col gap-5" ref="preloader"
+        v-if="preloading">
+        <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full max-w-40 max-h-40">
+        <Icon name="solar:refresh-circle-line-duotone" class="text-4xl animate-spin"></Icon>
+    </div>
+
+    <div class="font-menu_font1 max-w-xl mx-auto">
+        <!-- LOGO -->
+        <div class="text-center p-5">
+            <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full max-w-40 max-h-40">
+        </div>
+        <!--NAVIGATION-->
+        <section ref="navigationEl">
+            <div class="text-center text-2xl flex justify-center gap-2 p-2 bg-white" ref="navibtnparent">
+
+                <button class="flex items-center gap-1 font-bold p-2 shadow-md rounded cursor-pointer'"
+                    @click="fontsizer()" :class="[rest.style.navBtn]">
+                    <Icon name="solar:list-arrow-up-bold-duotone" v-show="!isFontSize" />
+                    <Icon name="solar:list-arrow-down-bold-duotone" v-show="isFontSize" />
+                </button>
+                <button v-show="isSupported"
+                    class="flex items-center gap-1 font-bold p-2 shadow-md rounded cursor-pointer'" @click="shareit()"
+                    :class="rest.style.navBtn">
+                    <Icon name="solar:share-circle-bold-duotone" />
+                </button>
+                <button @click="openNavView" ref="navBtnEl"
+                    class="flex items-center gap-1 font-bold ml-auto p-2 shadow-md rounded top-1 right-1 z-20 cursor-pointer'"
+                    :class="rest.style.navBtn">
+                    <Icon name="solar:documents-bold-duotone" />
+                    Menú
+                </button>
+            </div>
+
+
+            <div ref="navviewEl" v-show="navView"
+                class="fixed top-0 left-4 right-4 bottom-4 z-50 rounded-b shadow-2xl p-5 flex flex-col"
+                :class="rest.style.navBg">
+                <div class="text-center" @click="selectNavActive(99)">
+                    <img :src="rest.logoNav" :alt="rest.name" class="mx-auto w-full max-w-20 max-h-20">
+                </div>
+                <div class="overflow-y-auto w-full h-full flex flex-col items-start justify-evenly p-2 gap-5">
+                    <div v-for="(item, index) in rest.menu" class="cursor-pointer"
+                        :class="[navActive == index ? '' : '']" @click="selectNavActive(index)">
+                        <span
+                            :class="[rest.style.navAll, navActive == index ? rest.style.navActive : rest.style.navInactive]">
+                            {{ item.name.toUpperCase() }}
+                        </span>
+                    </div>
+                </div>
+                <button @click="closeNavView"
+                    class=" flex items-center gap-2 mx-auto  font-bold   p-2 shadow-md rounded  cursor-pointer'"
+                    :class="rest.style.navBtnClose">
+                    <Icon name="solar:documents-bold-duotone" />
+                    Cerrar
+                </button>
+            </div>
+        </section>
+
+
+        <!-- MENU -->
+        <section class="py-5" :class="[navView ? 'pointer-events-none' : '']">
+            <div v-for="(cat, cat_index) in rest.menu" class="categorysection" :id="`cat_${cat_index}`">
+                <!--CATEGORY-->
+                <div :class="rest.style.catName" class="">
+                    <div class="w-2/3">{{ cat.name.toUpperCase() }}</div>
+                </div>
+                <div v-if="cat.description" :class="rest.style.catDescription">{{ cat.description.toUpperCase() }}
+                </div>
+
+                <!--ARTICLE-->
+                <article v-for="(plat, plat_index) in cat.list" :class="rest.style.articleWrapper">
+                    <div class="flex" :class="rest.style.articleInner">
+                        <div class="w-3/6 p-2 shrink-0">
+                            <div :class="rest.style.articleName">{{ plat.name }}</div>
+                            <div :class="rest.style.articleDescription">{{ plat.description }}</div>
+                        </div>
+                        <div class="grow flex flex-col gap-4 text-white p-2 justify-evenly"
+                            :class="rest.style.articleVariantBg">
+                            <div class="flex gap-2 text-right " v-for="(variant, variant_index ) in plat.variants">
+                                <div class="shrink-0" :class="isFontSize ? 'w-1/2' : 'w-4/6'">
+                                    <div :class="rest.style.articleVariantName">{{ variant.name }}</div>
+                                    <div :class="rest.style.articleVariantDescription">{{ variant.description }}
+                                    </div>
+                                </div>
+                                <div class="text-right grow" :class="rest.style.articleVariantPrice">
+                                    {{ formatCurrency(variant.price) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="plat.information" :class="rest.style.articleInfo">{{ plat.information }}</div>
+                </article>
+
+
+            </div> <!-- vfor -->
+        </section> <!--/menu-->
+
+        <div class="flex flex-wrap items-start justify-center p-2 gap-x-5 gap-y-2">
+            <div v-for="(item, index) in rest.menu" class="cursor-pointer" :class="rest.style.navFooterAll"
+                @click="selectNavActive(index)">
+                {{ item.name.toUpperCase() }}
+            </div>
+        </div>
+
+        <footer class="flex flex-col gap-5 p-2">
+
+
+
+            <div :class="rest.style.legals">{{ rest.legals }}</div>
+
+            <!-- LOGO -->
+            <div class="text-center p-5">
+                <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full max-w-40 max-h-40">
+            </div>
+
+            <div class="flex gap-2 flex-wrap justify-center items-center">
+                <a v-for="(phone, index) in rest.phones" :href="`tel:${phone}`" :class="rest.style.phones">
+                    <Icon name="solar:phone-calling-line-duotone" />
+                    {{ phone }}
+                </a>
+            </div>
+            <div :class="rest.style.address">{{ rest.address }}</div>
+        </footer>
+
+
+    </div><!--fullmenu-->
+
+</template>
