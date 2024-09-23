@@ -1,12 +1,12 @@
 <script setup lang="ts">
+const route = useRoute()
 
-const { data: rest } = await useFetch('https://abrir.pockethost.io/m/AMOLE')
+const { data: rest } = await useFetch('https://abrir.pockethost.io/m/' + route.params.menutoken)
 
 
 import { animate } from "motion"
 import { isClient } from '@vueuse/shared'
 
-const route = useRoute()
 
 
 
@@ -33,7 +33,7 @@ const selectNavActive = (index) => {
         navActive.value = 0
     } else {
         navActive.value = index
-        document.getElementById("cat_" + index).scrollIntoView();
+        document.getElementById("cat_" + index).scrollIntoView({ behavior: 'smooth' });
     }
     closeNavView()
 }
@@ -89,7 +89,6 @@ const loadColors = () => {
     document.documentElement.style.setProperty('--menu-color1', rest.value.style.colors[0]);
     document.documentElement.style.setProperty('--menu-color2', rest.value.style.colors[1]);
     document.documentElement.style.setProperty('--menu-color3', rest.value.style.colors[2]);
-    console.log(document.documentElement.style, rest.value.style.colors[0])
 }
 
 
@@ -103,12 +102,9 @@ const checkloader = () => {
         let currentTime = performance.now();
         let timeDiff = currentTime - lastLoadTime;
         if (timeDiff >= 500) {
-            console.log("All loaded");
             animate(preloader.value, { y: [-window.innerHeight], opacity: 0 }, { duration: .8 }).finished.then(() => {
                 preloading.value = false
             })
-        } else {
-            console.log("Loading...");
         }
     }, 500);
 
@@ -118,7 +114,6 @@ const checkloader = () => {
 function handleIntersection(entries, observer) {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
-            console.log(`Entered viewport: ${entry.target.id}`);
             let catindex = entry.target.id.replace('cat_', '')
             navActive.value = catindex
         }
@@ -148,7 +143,6 @@ const fontsizer = () => {
 
 const { share, isSupported } = useShare()
 const shareit = () => {
-    console.log(share, isSupported.value)
     share({
         title: rest.value.name,
         text: 'Menú digital',
@@ -187,13 +181,39 @@ onMounted(() => {
 
 
 
+
+useScriptTag(
+    'https://cdn.tailwindcss.com',
+    (el: HTMLScriptElement) => {
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        menu_color1: "var(--menu-color1)",
+                        menu_color2: "var(--menu-color2)",
+                        menu_color3: "var(--menu-color3)",
+                    },
+                    fontFamily: {
+                        menu_font1: "var(--menu-font1)",
+                        menu_font2: "var(--menu-font2)",
+                    },
+                },
+            }
+        }
+    }
+
+)
+
 </script>
 
 <template>
 
+
+
     <div class="fixed bg-white inset-0 flex justify-center items-center z-50 flex-col gap-5" ref="preloader"
         v-if="preloading">
         <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full max-w-40 max-h-40">
+        <h1 :class="rest.style.restname">{{ rest.name }}</h1>
         <Icon name="solar:refresh-circle-line-duotone" class="text-4xl animate-spin"></Icon>
     </div>
 
@@ -201,6 +221,7 @@ onMounted(() => {
         <!-- LOGO -->
         <div class="text-center p-5">
             <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full max-w-40 max-h-40">
+            <h1 :class="rest.style.restname">{{ rest.name }}</h1>
         </div>
         <!--NAVIGATION-->
         <section ref="navigationEl">
@@ -255,7 +276,7 @@ onMounted(() => {
             <div v-for="(cat, cat_index) in rest.menu" class="categorysection" :id="`cat_${cat_index}`">
                 <!--CATEGORY-->
                 <div :class="rest.style.catName" class="">
-                    <div class="w-2/3">{{ cat.name.toUpperCase() }}</div>
+                    <h2 class="w-2/3">{{ cat.name.toUpperCase() }}</h2>
                 </div>
                 <div v-if="cat.description" :class="rest.style.catDescription">{{ cat.description.toUpperCase() }}
                 </div>
