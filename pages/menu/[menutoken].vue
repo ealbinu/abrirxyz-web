@@ -3,12 +3,23 @@ const route = useRoute()
 
 const { data: rest } = await useFetch('https://abrir.pockethost.io/m/' + route.params.menutoken.toUpperCase())
 
+useHead({
+    title: rest.value.name,
+    htmlAttrs: { lang: 'es' },
+    meta: [
+        { name: 'description', content: 'Menú digital' }
+    ],
+    script: [
+        {
+            src: 'https://cdn.tailwindcss.com',
+            tagPosition: 'head'
+        }
+    ],
+    link: [{ rel: 'icon', type: 'image/png', href: rest.value.favicon }]
+})
 
 import { animate } from "motion"
 import { isClient } from '@vueuse/shared'
-
-
-
 
 
 
@@ -165,6 +176,26 @@ const startIntersectionO = () => {
 
 
 
+
+const tailwindconf = () => {
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    menu_color1: "var(--menu-color1)",
+                    menu_color2: "var(--menu-color2)",
+                    menu_color3: "var(--menu-color3)",
+                },
+                fontFamily: {
+                    menu_font1: "var(--menu-font1)",
+                    menu_font2: "var(--menu-font2)",
+                },
+            },
+        }
+    }
+}
+
+
 const startMounting = async () => {
 
     loadFonts();
@@ -175,34 +206,19 @@ const startMounting = async () => {
 
 };
 
+
+
+
+
+
 onMounted(() => {
+    tailwindconf()
     startMounting();
 });
 
 
 
 
-useScriptTag(
-    'https://cdn.tailwindcss.com',
-    (el: HTMLScriptElement) => {
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        menu_color1: "var(--menu-color1)",
-                        menu_color2: "var(--menu-color2)",
-                        menu_color3: "var(--menu-color3)",
-                    },
-                    fontFamily: {
-                        menu_font1: "var(--menu-font1)",
-                        menu_font2: "var(--menu-font2)",
-                    },
-                },
-            }
-        }
-    }
-
-)
 
 </script>
 
@@ -213,7 +229,7 @@ useScriptTag(
     <div class="fixed bg-white inset-0 flex justify-center items-center z-50 flex-col gap-5" ref="preloader"
         v-if="preloading">
         <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full max-w-40 max-h-40">
-        <h1 :class="rest.style.restname">{{ rest.name }}</h1>
+        <div :class="rest.style.restname">{{ rest.name }}</div>
         <Icon name="solar:refresh-circle-line-duotone" class="text-4xl animate-spin"></Icon>
     </div>
 
@@ -227,17 +243,18 @@ useScriptTag(
         <section ref="navigationEl">
             <div class="text-center text-2xl flex justify-center gap-2 p-2 bg-white" ref="navibtnparent">
 
-                <button class="flex items-center gap-1 font-bold p-2 shadow-md rounded cursor-pointer'"
-                    @click="fontsizer()" :class="[rest.style.navBtn]">
+                <button alt="Cambiar tamaño de texto" title="Tamaño de texto"
+                    class="flex items-center gap-1 font-bold p-2 shadow-md rounded cursor-pointer'" @click="fontsizer()"
+                    :class="[rest.style.navBtn]">
                     <Icon name="solar:list-arrow-up-bold-duotone" v-show="!isFontSize" />
                     <Icon name="solar:list-arrow-down-bold-duotone" v-show="isFontSize" />
                 </button>
-                <button v-show="isSupported"
+                <button alt="Compartir" title="Compartir" v-show="isSupported"
                     class="flex items-center gap-1 font-bold p-2 shadow-md rounded cursor-pointer'" @click="shareit()"
                     :class="rest.style.navBtn">
                     <Icon name="solar:share-circle-bold-duotone" />
                 </button>
-                <button @click="openNavView" ref="navBtnEl"
+                <button alt="Menú" title="Menú" @click="openNavView" ref="navBtnEl"
                     class="flex items-center gap-1 font-bold ml-auto p-2 shadow-md rounded top-1 right-1 z-20 cursor-pointer'"
                     :class="rest.style.navBtn">
                     <Icon name="solar:documents-bold-duotone" />
@@ -292,7 +309,7 @@ useScriptTag(
                             :class="rest.style.articleVariantBg">
                             <div class="flex gap-2 text-right " v-for="(variant, variant_index ) in plat.variants">
                                 <div class="shrink-0" :class="isFontSize ? 'w-1/2' : 'w-4/6'">
-                                    <div :class="rest.style.articleVariantName">{{ variant.name }}</div>
+                                    <div :class="rest.style.articleVariantName" class="">{{ variant.name }}</div>
                                     <div :class="rest.style.articleVariantDescription">{{ variant.description }}
                                     </div>
                                 </div>
@@ -338,5 +355,13 @@ useScriptTag(
 
 
     </div><!--fullmenu-->
+
+
+    <div>
+        <a title="Ir a TalachaDigital.com" alt="Ir a TalachaDigital.com" href="https://talachadigital.com"
+            target="_blank" class="block mx-auto w-20 my-10">
+            <img src="/img/talachadigital.svg" alt="Talacha Digital">
+        </a>
+    </div>
 
 </template>
