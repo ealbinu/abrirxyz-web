@@ -310,7 +310,7 @@ const bgPhoto = (imgurl) => {
                 <!--ARTICLE-->
                 <article v-for="(plat, plat_index) in cat.list" :class="rest.style.articleWrapper">
 
-                    <div v-if="plat.photo" :class="`aspect-[580/320] bg-cover bg-center  bg-[url(plat.photo[1])]`">
+                    <div v-if="plat.photo" :class="`aspect-[580/320] bg-cover bg-center  bg-[url(${plat.photo[1]})]`">
                     </div>
 
                     <div class="flex" :class="rest.style.articleInner">
