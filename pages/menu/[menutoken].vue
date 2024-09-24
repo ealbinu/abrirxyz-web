@@ -217,6 +217,12 @@ onMounted(() => {
 });
 
 
+const img = useImage()
+
+const bgPhoto = (imgurl) => {
+    const theimg = img(imgurl, { width: 580, height: 200 })
+    return theimg
+}
 
 
 
@@ -233,7 +239,8 @@ onMounted(() => {
         <Icon name="solar:refresh-circle-line-duotone" class="text-4xl animate-spin"></Icon>
     </div>
 
-    <div class="font-menu_font1 max-w-xl mx-auto">
+    <div class="font-menu_font1 max-w-xl mx-auto"
+        :class="rest.bgpattern ? `bg-[url(${rest.bgpattern})] bg-repeat-x bg-[length:128px]` : ''">
         <!-- LOGO -->
         <div class="text-center p-5">
             <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full max-w-40 max-h-40">
@@ -241,7 +248,7 @@ onMounted(() => {
         </div>
         <!--NAVIGATION-->
         <section ref="navigationEl">
-            <div class="text-center text-2xl flex justify-center gap-2 p-2 bg-white" ref="navibtnparent">
+            <div class="text-center text-2xl flex justify-center gap-2 p-2 " ref="navibtnparent">
 
                 <button alt="Cambiar tamaño de texto" title="Tamaño de texto"
                     class="flex items-center gap-1 font-bold p-2 shadow-md rounded cursor-pointer'" @click="fontsizer()"
@@ -291,6 +298,8 @@ onMounted(() => {
         <!-- MENU -->
         <section class="py-5" :class="[navView ? 'pointer-events-none' : '']">
             <div v-for="(cat, cat_index) in rest.menu" class="categorysection" :id="`cat_${cat_index}`">
+
+
                 <!--CATEGORY-->
                 <div :class="rest.style.catName" class="">
                     <h2 class="w-2/3">{{ cat.name.toUpperCase() }}</h2>
@@ -300,6 +309,11 @@ onMounted(() => {
 
                 <!--ARTICLE-->
                 <article v-for="(plat, plat_index) in cat.list" :class="rest.style.articleWrapper">
+
+                    <div v-if="plat.photo"
+                        :class="`aspect-[580/320] bg-cover bg-center  bg-[url(${bgPhoto(plat.photo[1])})]`">
+                    </div>
+
                     <div class="flex" :class="rest.style.articleInner">
                         <div class="w-3/6 p-2 shrink-0">
                             <div :class="rest.style.articleName">{{ plat.name }}</div>

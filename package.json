@@ -20,6 +20,7 @@
   "devDependencies": {
     "@formkit/auto-animate": "latest",
     "@nuxt/icon": "latest",
+    "@nuxt/image": "latest",
     "@nuxtjs/tailwindcss": "latest",
     "@vueuse/nuxt": "latest"
   }

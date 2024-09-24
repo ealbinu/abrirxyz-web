@@ -14,5 +14,6 @@ export default defineNuxtConfig({
     '@formkit/auto-animate',
     '@vueuse/nuxt',
     '@vueuse/motion/nuxt',
+    '@nuxt/image'
   ]
 })
