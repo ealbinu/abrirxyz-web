@@ -354,7 +354,8 @@ const bgPhoto = (imgurl) => {
 
             <!-- LOGO -->
             <div class="text-center p-5">
-                <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full max-w-40 max-h-40">
+                <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full max-w-40 max-h-40"
+                    :class="rest.style.logos">
             </div>
 
             <div class="flex gap-2 flex-wrap justify-center items-center">
