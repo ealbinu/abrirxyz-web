@@ -274,7 +274,7 @@ const bgPhoto = (imgurl) => {
                 class="fixed top-0 left-4 right-4 bottom-4 z-50 rounded-b shadow-2xl p-5 flex flex-col"
                 :class="rest.style.navBg">
                 <div class="text-center" @click="selectNavActive(99)">
-                    <img :src="rest.logoNav" :alt="rest.name" class="mx-auto w-full max-w-20 max-h-20">
+                    <img :src="rest.logoNav" :alt="rest.name" class="mx-auto w-full" :class="rest.style.logoNav">
                 </div>
                 <div class="overflow-y-auto w-full h-full flex flex-col items-start justify-evenly p-2 gap-5">
                     <div v-for="(item, index) in rest.menu" class="cursor-pointer"
@@ -301,6 +301,14 @@ const bgPhoto = (imgurl) => {
 
 
                 <!--CATEGORY-->
+
+                <div v-if="cat.photos" class="flex overflow-x-auto">
+                    <div v-for="(pho, pho_index) in cat.photos"
+                        :class="`aspect-[580/320] bg-cover bg-center w-full bg-[url(${pho})]`"></div>
+
+
+                </div>
+
                 <div :class="rest.style.catName" class="">
                     <h2 class="w-2/3">{{ cat.name.toUpperCase() }}</h2>
                 </div>
