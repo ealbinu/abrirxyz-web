@@ -234,7 +234,7 @@ const bgPhoto = (imgurl) => {
 
     <div class="fixed bg-white inset-0 flex justify-center items-center z-50 flex-col gap-5" ref="preloader"
         v-if="preloading">
-        <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full max-w-40 max-h-40">
+        <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full" :class="rest.style.logos">
         <div :class="rest.style.restname">{{ rest.name }}</div>
         <Icon name="solar:refresh-circle-line-duotone" class="text-4xl animate-spin"></Icon>
     </div>
@@ -243,7 +243,7 @@ const bgPhoto = (imgurl) => {
         :class="rest.bgpattern ? `bg-[url(${rest.bgpattern})] bg-repeat-x bg-[length:128px]` : ''">
         <!-- LOGO -->
         <div class="text-center p-5">
-            <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full max-w-40 max-h-40">
+            <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full" :class="rest.style.logos">
             <h1 :class="rest.style.restname">{{ rest.name }}</h1>
         </div>
         <!--NAVIGATION-->
@@ -354,8 +354,7 @@ const bgPhoto = (imgurl) => {
 
             <!-- LOGO -->
             <div class="text-center p-5">
-                <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full max-w-40 max-h-40"
-                    :class="rest.style.logos">
+                <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full" :class="rest.style.logos">
             </div>
 
             <div class="flex gap-2 flex-wrap justify-center items-center">
