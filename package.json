@@ -10,18 +10,35 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@iconify-json/hugeicons": "^1.2.0",
+    "@iconify-json/solar": "^1.2.0",
     "@vueuse/motion": "^2.2.5",
+    "compressorjs": "^1.2.1",
+    "dropzone-nuxt": "^0.1.3",
+    "filepond": "^4.31.4",
+    "filepond-plugin-file-validate-type": "^1.2.9",
+    "filepond-plugin-image-edit": "^1.6.3",
+    "filepond-plugin-image-preview": "^4.6.12",
+    "filepond-plugin-image-resize": "^2.0.10",
+    "mitt": "^3.0.1",
     "motion": "^10.18.0",
     "nuxt": "^3.13.0",
+    "pocketbase": "^0.21.5",
     "vue": "latest",
+    "vue-filepond": "^7.0.4",
     "vue-router": "latest",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
     "@formkit/auto-animate": "latest",
+    "@formkit/nuxt": "latest",
     "@nuxt/icon": "latest",
     "@nuxt/image": "latest",
+    "@nuxtjs/google-fonts": "latest",
     "@nuxtjs/tailwindcss": "latest",
     "@vueuse/nuxt": "latest"
+  },
+  "resolutions": {
+    "vue": "3.3.13"
   }
 }

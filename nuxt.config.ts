@@ -8,12 +8,27 @@ export default defineNuxtConfig({
       enabled: true
     }
   },
+  plugins: [
+    '~/plugins/mitt',
+  ],
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxt/icon',
     '@formkit/auto-animate',
     '@vueuse/nuxt',
     '@vueuse/motion/nuxt',
-    '@nuxt/image'
-  ]
+    '@nuxt/image',
+    '@formkit/nuxt',
+    '@nuxtjs/google-fonts',
+  ],
+  runtimeConfig: {
+    public: {
+      server_base: process.env.SERVER_BASE,
+    }
+  },
+  googleFonts: {
+    families: {
+      Outfit: true
+    }
+  }
 })
