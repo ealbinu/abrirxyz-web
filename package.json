@@ -40,5 +40,8 @@
   },
   "resolutions": {
     "vue": "3.3.13"
+  },
+  "overrides": {
+    "vue": "latest"
   }
 }
