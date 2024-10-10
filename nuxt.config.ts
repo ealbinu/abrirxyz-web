@@ -1,5 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  gtm: {
+    id: 'GTM-K44JD7L9',
+    defer: true,
+    enableRouterSync: true
+  },
   compatibilityDate: '2024-04-03',
   devtools: {
     enabled: true,
@@ -20,6 +25,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@formkit/nuxt',
     '@nuxtjs/google-fonts',
+    '@zadigetvoltaire/nuxt-gtm'
   ],
   runtimeConfig: {
     public: {

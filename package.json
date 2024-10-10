@@ -36,7 +36,8 @@
     "@nuxt/image": "latest",
     "@nuxtjs/google-fonts": "latest",
     "@nuxtjs/tailwindcss": "latest",
-    "@vueuse/nuxt": "latest"
+    "@vueuse/nuxt": "latest",
+    "@zadigetvoltaire/nuxt-gtm": "latest"
   },
   "resolutions": {
     "vue": "3.3.13"
