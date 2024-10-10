@@ -368,14 +368,35 @@ const bgPhoto = (imgurl) => {
                     <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full rs-logos" :class="rest.style.logos">
                 </div>
 
+                <div v-if="rest.message" :class="rest.style.message" class="rs-Message" v-html="rest.message" />
+
+
                 <div class="flex gap-2 flex-wrap justify-center items-center">
-                    <a v-for="(phone, index) in rest.phones" :href="`tel:${phone}`" class="rs-phones"
-                        :class="rest.style.phones">
-                        <Icon name="solar:phone-calling-line-duotone" />
+                    <a v-for="(phone, index) in rest.phones" :href="`tel:${phone}`"
+                        class="rs-phones flex items-center gap-2 justify-center" :class="rest.style.phones">
+                        <Icon name="solar:phone-calling-line-duotone" class="text-xl" />
                         {{ phone }}
                     </a>
                 </div>
-                <div :class="rest.style.address" class="rs-address">{{ rest.address }}</div>
+                <div>
+                    <a v-if="rest.addressLink" :href="rest.addressLink" target="_blank" :class="rest.style.address"
+                        class="rs-address flex justify-center items-center gap-2">
+                        <Icon name="solar:map-point-linear" class="text-xl" />
+                        <div>{{ rest.address }}</div>
+                    </a>
+                    <div v-else :class="rest.style.address" class="rs-address">{{ rest.address }}</div>
+                </div>
+
+                <div class="flex gap-5 flex-wrap justify-center items-center text-3xl">
+                    <a v-if="rest.social" v-for="(url, index) in rest.social" :href="url" class="rs-social"
+                        :class="rest.style.social">
+
+                        <Icon name="logos:facebook" v-if="url.includes('facebook')" />
+                        <Icon name="logos:instagram-icon" v-if="url.includes('instagram')" />
+
+                    </a>
+                </div>
+
             </footer>
 
 
@@ -384,8 +405,8 @@ const bgPhoto = (imgurl) => {
 
         <div class="p-5">
             <a title="Ir a TalachaDigital.com" alt="Ir a TalachaDigital.com" href="https://talachadigital.com"
-                target="_blank" class="block mx-auto w-20 my-10 mix-blend-exclusion">
-                <img src="/img/talachadigital.svg" alt="Talacha Digital" class="mix-blend-exclusion">
+                target="_blank" class="block mx-auto w-20 my-10">
+                <MenuTalachadigitalLogo />
             </a>
         </div>
     </div>
