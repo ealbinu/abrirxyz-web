@@ -199,6 +199,27 @@ const startMounting = async () => {
 };
 
 
+const img = useImage()
+const bgPhoto = (imgurl) => {
+    const theimg = img(imgurl, { width: 580, height: 200 })
+    return theimg
+}
+
+
+
+
+const gtm = useGtm()
+const gtagmanager = () => {
+    gtm.trackEvent({
+        event: 'Menu Digital',
+        category: 'category',
+        action: 'Abierto',
+        label: rest.value.name,
+        value: 1,
+        noninteraction: false,
+    })
+
+}
 
 
 
@@ -206,15 +227,14 @@ const startMounting = async () => {
 onMounted(() => {
     tailwindconf()
     startMounting();
+    gtagmanager()
 });
 
 
-const img = useImage()
 
-const bgPhoto = (imgurl) => {
-    const theimg = img(imgurl, { width: 580, height: 200 })
-    return theimg
-}
+
+
+
 
 
 

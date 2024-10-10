@@ -1,9 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   gtm: {
-    id: 'GTM-K44JD7L9',
-    defer: true,
-    enableRouterSync: true
+    id: 'GTM-K44JD7L9'
   },
   compatibilityDate: '2024-04-03',
   devtools: {
