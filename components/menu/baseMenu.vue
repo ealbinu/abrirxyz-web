@@ -208,26 +208,10 @@ const bgPhoto = (imgurl) => {
 
 
 
-const gtm = useGtm()
-const gtagmanager = () => {
-    gtm.trackEvent({
-        event: 'Menu Digital',
-        category: 'category',
-        action: 'Abierto',
-        label: rest.value.name,
-        value: 1,
-        noninteraction: false,
-    })
-
-}
-
-
-
 
 onMounted(() => {
     tailwindconf()
     startMounting();
-    gtagmanager()
 });
 
 

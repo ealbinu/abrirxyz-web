@@ -1,7 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  gtm: {
-    id: 'GTM-K44JD7L9'
+  umami: {
+    id: '6279ff8a-b42b-43c4-8910-efc5e141bfbb',
+    host: 'https://umami-production-0033e.up.railway.app/script.js',
+    autoTrack: true,
   },
   compatibilityDate: '2024-04-03',
   devtools: {
@@ -23,15 +25,11 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@formkit/nuxt',
     '@nuxtjs/google-fonts',
-    '@zadigetvoltaire/nuxt-gtm'
+    'nuxt-umami'
   ],
   runtimeConfig: {
     public: {
-      server_base: process.env.SERVER_BASE,
-      gtm: {
-        id: 'GTM-K44JD7L9',
-        enableRouterSync: true
-      }
+      server_base: process.env.SERVER_BASE
     }
   },
   googleFonts: {
