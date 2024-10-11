@@ -28,6 +28,10 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       server_base: process.env.SERVER_BASE,
+      gtm: {
+        id: 'GTM-K44JD7L9',
+        enableRouterSync: true
+      }
     }
   },
   googleFonts: {
