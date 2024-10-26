@@ -405,30 +405,31 @@ onMounted(() => {
 
 
 
-                <div :class="thestyles.legals" class="rs-legals">{{ rest.legals }}</div>
+                <div :class="thestyles.legals" class="rs-legals">{{ thebranches[0].legals }}</div>
 
                 <!-- LOGO -->
                 <div class="text-center p-5">
-                    <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full rs-logos" :class="thestyles.logos">
+                    <img :src="thelogo" :alt="rest.name" class="mx-auto w-full rs-logos" :class="thestyles.logos">
                 </div>
 
-                <div v-if="rest.message" :class="thestyles.message" class="rs-Message" v-html="rest.message" />
+                <div v-if="thebranches[0].message" :class="thestyles.message" class="rs-Message"
+                    v-html="thebranches[0].message" />
 
 
                 <div class="flex gap-2 flex-wrap justify-center items-center">
-                    <a v-for="(phone, index) in rest.phones" :href="`tel:${phone}`"
+                    <a v-for="(phone, index) in thebranches[0].phone" :href="`tel:${phone}`"
                         class="rs-phones flex items-center gap-2 justify-center" :class="thestyles.phones">
                         <Icon name="solar:phone-calling-line-duotone" class="text-xl" />
                         {{ phone }}
                     </a>
                 </div>
                 <div>
-                    <a v-if="rest.addressLink" :href="rest.addressLink" target="_blank" :class="thestyles.address"
-                        class="rs-address flex justify-center items-center gap-2">
+                    <a v-if="thebranches[0].addressLink" :href="thebranches[0].addressLink" target="_blank"
+                        :class="thestyles.address" class="rs-address flex justify-center items-center gap-2">
                         <Icon name="solar:map-point-linear" class="text-xl" />
-                        <div>{{ rest.address }}</div>
+                        <div>{{ thebranches[0].address }}</div>
                     </a>
-                    <div v-else :class="thestyles.address" class="rs-address">{{ rest.address }}</div>
+                    <div v-else :class="thestyles.address" class="rs-address">{{ thebranches[0].address }}</div>
                 </div>
 
                 <div class="flex gap-5 flex-wrap justify-center items-center text-3xl">
