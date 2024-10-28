@@ -1,5 +1,5 @@
 <template>
-    <div class="flex gap-2 flex-wrap w-full mt-10" v-auto-animate>
+    <div class="flex gap-2 flex-wrap w-full mt-10" v-auto-animate v-if="areas && areas.length">
         <template v-for="(item, index) in areas">
             <div class="grow text-center p-2 cursor-pointer text-xl" v-auto-animate
                 :class="item === modelValue ? 'bg-menu_color1 text-white' : 'bg-menu_color2'" v-html="item"
@@ -10,7 +10,7 @@
 
 <script setup>
 const props = defineProps({
-    areas: { type: Array, required: true },
+    areas: Array,
     styles: Object,
     modelValue: String
 })

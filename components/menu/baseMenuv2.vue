@@ -2,6 +2,9 @@
 import { animate } from "motion"
 import { isClient } from '@vueuse/shared'
 
+
+
+
 const props = defineProps({
     thedata: Object,
     hidemenu: Boolean,
@@ -34,7 +37,9 @@ const navView = ref(false)
 
 
 
-const menu_areas = [...new Set(themenu.map(item => item.area))];
+const menu_areas = [...new Set(themenu.map(item => item.area).filter(area => area !== undefined))];
+
+
 
 const selected_area = ref(menu_areas[0])
 
@@ -46,9 +51,6 @@ const menu_render = computed(() => {
     }
 })
 
-
-
-console.log('areas:', menu_areas)
 
 const selectNavActive = (index) => {
     if (index == 99) {
@@ -234,6 +236,7 @@ const bgPhoto = (imgurl) => {
 onMounted(() => {
     tailwindconf()
     startMounting();
+    console.log('dmenuv2')
 });
 
 
@@ -248,7 +251,7 @@ onMounted(() => {
 
 <template>
 
-    <div class="digital-menu-content rs-content" :class="thestyles?.content || 'bg-white'">
+    <div class="digital-menu-content rs-content dmenuv2" :class="thestyles?.content || 'bg-white'">
 
 
         <div :class="thestyles?.preloading || 'bg-white'"
