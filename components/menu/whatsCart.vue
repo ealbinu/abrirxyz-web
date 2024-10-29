@@ -2,8 +2,7 @@
 
     <div v-if="isvisible">
         <div :class="menuStore.navSidebarView2 ? 'animate__animated animate__fadeIn' : 'animate__animated animate__fadeOut'"
-            ref="sidebarBg" class="fixed inset-0 bg-black/60 z-30 cursor-pointer"
-            @click="menuStore.setWhatsSidebar(false)">
+            ref="sidebarBg" class="fixed inset-0 bg-black/60 z-30 cursor-pointer" @click="closeSidebar">
         </div>
 
         <div ref="navviewEl"
