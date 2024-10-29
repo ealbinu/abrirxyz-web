@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const useMenu = defineStore('myStore', {
+export const useMenu = defineStore('menuStore', {
   state: () => ({
     thedata: null,
     themenu: null,
@@ -9,13 +9,15 @@ export const useMenu = defineStore('myStore', {
     thestyles:null,
     thename: null,
     navSidebarView: false,
+    whatsSidebarView: false,
+    navSidebarView2: false,
     fontSize: false,
     areas: null,
     activeArea: null,
     activeNav: 0,
     whatsOrder: null,
     whatsOrderOn: false,
-    whatsSidebarView: false,
+    
   }),
   getters:{
     menu_render: (state) => {
@@ -39,6 +41,9 @@ export const useMenu = defineStore('myStore', {
     },
     setSidebar(val){
       this.navSidebarView = val
+    },
+    setSidebar2(val){
+      this.navSidebarView2 = val
     },
     setWhatsSidebar(val){
       this.whatsSidebarView = val

@@ -133,7 +133,7 @@ onMounted(() => {
             <MenuNavSidebar />
             <MenuLogo />
 
-            <MenuWhatsOrder v-if="menuStore.whatsOrder && false" />
+            <MenuWhatsOrder v-if="menuStore.whatsOrder" />
 
             <MenuAreas />
 

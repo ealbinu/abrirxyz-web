@@ -1,13 +1,13 @@
 <template>
 
     <div v-if="isvisible">
-        <div :class="menuStore.whatsSidebarView ? 'animate__animated animate__fadeIn' : 'animate__animated animate__fadeOut'"
+        <div :class="menuStore.navSidebarView2 ? 'animate__animated animate__fadeIn' : 'animate__animated animate__fadeOut'"
             ref="sidebarBg" class="fixed inset-0 bg-black/60 z-30 cursor-pointer"
             @click="menuStore.setWhatsSidebar(false)">
         </div>
 
         <div ref="navviewEl"
-            :class="menuStore.whatsSidebarView ? 'animate__animated animate__slideInRight' : 'animate__animated animate__slideOutRight'"
+            :class="menuStore.navSidebarView2 ? 'animate__animated animate__slideInRight' : 'animate__animated animate__slideOutRight'"
             class="p-0 fixed top-4 bottom-4 right-0 w-4/5  max-w-96  animate__faster rounded-r-sm shadow-xl bg-white z-40 flex flex-col ">
 
 
@@ -113,28 +113,44 @@ const isvisible = ref(false)
 
 
 const openNavView = () => {
-    menuStore.setWhatsSidebar(true)
+    menuStore.setSidebar2(true)
 }
 
 
 
 const closeSidebar = () => {
     nextTick(() => {
-        menuStore.setWhatsSidebar(false)
+        menuStore.setSidebar2(false)
     })
 }
 
 
-const totalSum = ref(0)
+const totalSum = computed(() => {
+    let thesum = 0
+
+    filteredMenu.value.forEach(category => {
+        category.list.forEach(plat => {
+            if (plat?.variants && plat?.variants.length) {
+                plat.variants.forEach(variation => {
+                    thesum += variation.total
+                })
+            } else {
+                //simple
+                thesum += plat.total
+            }
+        })
+    })
+    return thesum
+})
 
 
 
 
 const filteredMenu = computed(() => {
     // Reinicia totalSum al calcular el menú filtrado
-    totalSum.value = 0;
+    const menuData = JSON.parse(JSON.stringify(menuStore.thedata.menu.menu))
 
-    return menuStore.thedata.menu.menu.map(category => {
+    let thefiltered = menuData.map(category => {
         return {
             ...category,
             list: category.list.map(item => {
@@ -142,14 +158,15 @@ const filteredMenu = computed(() => {
                 const filteredVariants = item.variants?.filter(variant => variant.qty > 0)
                     .map(variant => {
                         const variantTotal = variant.price * variant.qty;
-                        totalSum.value += variantTotal; // Sumar el total de cada variant
+                        //totalSum.value += variantTotal;
                         return {
                             ...variant,
                             total: variantTotal
                         }
                     }) || [];
 
-                // Si hay variants, retornamos solo los que tengan qty
+
+
                 if (filteredVariants.length > 0) {
                     return {
                         ...item,
@@ -158,7 +175,6 @@ const filteredMenu = computed(() => {
                     }
                 }
 
-                // Si no hay variants y el qty está en el item principal, añadir total si qty > 0
                 if (item.qty > 0) {
                     const itemTotal = item.price * item.qty;
                     totalSum.value += itemTotal; // Sumar total del item principal
@@ -172,6 +188,7 @@ const filteredMenu = computed(() => {
             }).filter(Boolean) // Eliminamos cualquier elemento nulo
         }
     }).filter(category => category.list.length > 0) // Eliminamos categorías vacías
+    return thefiltered
 });
 
 
@@ -237,8 +254,7 @@ const SendOrder = async () => {
 
 
     const { message, whatsappLink } = generateWhatsAppMessage(filteredMenu.value)
-    //console.log("Mensaje de WhatsApp:", message);
-    //console.log("Enlace de WhatsApp:", whatsappLink);
+
 
     await navigateTo(whatsappLink, {
         open: {
@@ -254,7 +270,7 @@ const SendOrder = async () => {
 
 
 const closeVisible = () => {
-    if (menuStore.whatsSidebarView) {
+    if (menuStore.navSidebarView2) {
         isvisible.value = true
     } else {
         setTimeout(() => {
@@ -265,7 +281,7 @@ const closeVisible = () => {
 
 
 onMounted(() => {
-    watch(() => menuStore.whatsSidebarView, (navValue) => {
+    watch(() => menuStore.navSidebarView2, (navValue) => {
         closeVisible()
     })
 

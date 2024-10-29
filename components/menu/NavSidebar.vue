@@ -22,9 +22,8 @@
             <MenuAreas class="my-3" />
 
             <div class="overflow-y-auto w-full grow  flex flex-col items-start p-2 gap-2">
-                <div v-for="(item, index) in menuStore.menu_render"
-                    class="cursor-pointer rounded-sm bg-gray-100 w-full p-1 "
-                    :class="[menuStore.activeNav == index ? 'bg-menu_color1 text-white' : '']"
+                <div v-for="(item, index) in menuStore.menu_render" class="cursor-pointer rounded-sm  w-full p-1 "
+                    :class="[menuStore.activeNav == index ? 'bg-menu_color1 text-white' : 'bg-gray-100']"
                     @click="selectNavActive(index)">
                     <span class="rs-navAll rs-navActive rs-navInactive">
                         {{ item.name.toUpperCase() }}

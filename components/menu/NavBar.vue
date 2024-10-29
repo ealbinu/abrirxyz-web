@@ -21,7 +21,7 @@
 
 
                 <button class="menu-btn !bg-green-600 text-white group" ref="whatsOrderBtn"
-                    v-show="menuStore.whatsOrderOn" @click="menuStore.setWhatsSidebar(true)">
+                    v-show="menuStore.whatsOrderOn" @click="openNavView2">
                     <Icon name="mingcute:paper-line" class="menu-btn-icon" />
                 </button>
 
@@ -56,9 +56,6 @@ const props = defineProps({
 
 
 
-const emit = defineEmits(['openNavView'])
-
-
 const menuStore = useMenu()
 
 const { share, isSupported } = useShare()
@@ -91,8 +88,11 @@ const fontsizer = () => {
 
 
 const openNavView = () => {
-    //emit('openNavView')
     menuStore.setSidebar(true)
+}
+const openNavView2 = () => {
+    menuStore.setSidebar2(true)
+
 }
 
 const whatsOrderBtn = ref<HTMLElement | null>(null)
