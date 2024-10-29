@@ -28,7 +28,10 @@
             <Icon name="mingcute:add-circle-line" class=" text-xl" />
         </div>
     </div>
-
+    <div v-show="false">
+        <Icon name="mingcute:minus-circle-line" class="text-xl" />
+        <Icon name="mingcute:add-circle-line" class=" text-xl" />
+    </div>
 </template>
 
 <script setup lang="ts">
