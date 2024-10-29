@@ -1,9 +1,10 @@
 <template>
-    <div class="flex gap-2 flex-wrap w-full mt-10" v-auto-animate v-if="areas && areas.length">
-        <template v-for="(item, index) in areas">
-            <div class="grow text-center p-2 cursor-pointer text-xl" v-auto-animate
-                :class="item === modelValue ? 'bg-menu_color1 text-white' : 'bg-menu_color2'" v-html="item"
-                @click="selectArea(item, index)"></div>
+    <div class="flex flex-wrap justify-center gap-1 w-full mt-5 px-1" v-auto-animate
+        v-if="menuStore.areas && menuStore.areas.length">
+        <template v-for="(item, index) in menuStore.areas">
+            <div class="grow text-center p-1 cursor-pointer text-xl rounded-sm " v-auto-animate
+                :class="item === menuStore.activeArea ? 'bg-menu_color1 text-white shadow-md transition-all duration-700' : 'bg-menu_color3'"
+                v-html="item" @click="menuStore.setActiveArea(item)"></div>
         </template>
     </div>
 </template>
@@ -11,15 +12,12 @@
 <script setup>
 const props = defineProps({
     areas: Array,
-    styles: Object,
     modelValue: String
 })
 
-const emit = defineEmits(['update:modelValue'])
+const menuStore = useMenu()
 
-const selectArea = (area, index) => {
-    emit('update:modelValue', area)
-}
+
+
+
 </script>
-
-<style scoped></style>

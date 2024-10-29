@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  css: ['animate.css/animate.min.css'],
   umami: {
     id: '6279ff8a-b42b-43c4-8910-efc5e141bfbb',
     host: 'https://umami-production-0033e.up.railway.app/script.js',
@@ -25,7 +26,8 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@formkit/nuxt',
     '@nuxtjs/google-fonts',
-    'nuxt-umami'
+    'nuxt-umami',
+    '@pinia/nuxt'
   ],
   runtimeConfig: {
     public: {

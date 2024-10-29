@@ -1,23 +1,16 @@
 <script setup lang="ts">
-import { animate } from "motion"
-import { isClient } from '@vueuse/shared'
-
-
-
 
 const props = defineProps({
     thedata: Object,
-    hidemenu: Boolean,
-    filepath: String
+    hidemenu: Boolean
 })
 
-const rest = ref(props.thedata.menu)
+const rest = ref(props.thedata)
 
 
-const thelogo = props.filepath + props.thedata.logo
-const themenu = props.thedata.menu.menu
-const thebranches = props.thedata.branches
-const thestyles = props.thedata.styles
+
+import { animate } from "motion"
+import { isClient } from '@vueuse/shared'
 
 
 
@@ -33,23 +26,6 @@ const navView = ref(false)
 
 
 
-
-
-
-
-const menu_areas = [...new Set(themenu.map(item => item.area).filter(area => area !== undefined))];
-
-
-
-const selected_area = ref(menu_areas[0])
-
-const menu_render = computed(() => {
-    if (themenu) {
-        return themenu.filter((i) => i.area === selected_area.value);
-    } else {
-        return []
-    }
-})
 
 
 const selectNavActive = (index) => {
@@ -101,19 +77,19 @@ const formatCurrency = (value) => {
 
 const loadFonts = async () => {
     const WebFont = await import('webfontloader');
-    if (thestyles.fonts.length) {
+    if (rest.value.style.fonts.length) {
         WebFont.load({
-            google: { families: thestyles.fonts }
+            google: { families: rest.value.style.fonts }
         });
-        document.documentElement.style.setProperty('--menu-font1', thestyles.fonts[0]);
-        document.documentElement.style.setProperty('--menu-font2', thestyles.fonts[1]);
+        document.documentElement.style.setProperty('--menu-font1', rest.value.style.fonts[0]);
+        document.documentElement.style.setProperty('--menu-font2', rest.value.style.fonts[1]);
     }
 }
 
 const loadColors = () => {
-    document.documentElement.style.setProperty('--menu-color1', thestyles.colors[0]);
-    document.documentElement.style.setProperty('--menu-color2', thestyles.colors[1]);
-    document.documentElement.style.setProperty('--menu-color3', thestyles.colors[2]);
+    document.documentElement.style.setProperty('--menu-color1', rest.value.style.colors[0]);
+    document.documentElement.style.setProperty('--menu-color2', rest.value.style.colors[1]);
+    document.documentElement.style.setProperty('--menu-color3', rest.value.style.colors[2]);
 }
 
 
@@ -169,7 +145,7 @@ const fontsizer = () => {
 const { share, isSupported } = useShare()
 const shareit = () => {
     share({
-        title: thebranches[0].name,
+        title: rest.value.name,
         text: 'Menú digital',
         url: isClient ? location.href : '',
     })
@@ -236,7 +212,6 @@ const bgPhoto = (imgurl) => {
 onMounted(() => {
     tailwindconf()
     startMounting();
-    console.log('dmenuv2')
 });
 
 
@@ -250,26 +225,24 @@ onMounted(() => {
 </script>
 
 <template>
+    <div class="digital-menu-content rs-content" :class="rest.style?.content || 'bg-white'">
 
-    <div class="digital-menu-content rs-content dmenuv2" :class="thestyles?.content || 'bg-white'">
 
-
-        <div :class="thestyles?.preloading || 'bg-white'"
+        <div :class="rest.style?.preloading || 'bg-white'"
             class="fixed  inset-0 flex justify-center items-center z-50 flex-col gap-5 rs-preloading" ref="preloader"
             v-if="preloading">
-
-            <img :src="thelogo" :alt="thebranches[0].name" class="mx-auto w-full rs-logos" :class="thestyles.logos">
-            <div :class="thestyles.restname" class="rs-restname">{{ thebranches[0].name }}</div>
+            <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full rs-logos" :class="rest.style.logos">
+            <div :class="rest.style.restname" class="rs-restname">{{ rest.name }}</div>
             <Icon name="solar:refresh-circle-line-duotone" class="text-4xl animate-spin rs-preloadingIcon"
-                :class="thestyles?.preloadingIcon"></Icon>
+                :class="rest.style?.preloadingIcon"></Icon>
         </div>
 
         <div class="font-menu_font1 max-w-xl mx-auto"
             :class="rest.bgpattern ? `bg-[url(${rest.bgpattern})] bg-repeat-x bg-[length:128px]` : ''">
             <!-- LOGO -->
             <div class="text-center p-5">
-                <img :src="thelogo" :alt="thebranches[0].name" class="mx-auto w-full" :class="thestyles.logos">
-                <h1 :class="thestyles.restname" class="rs-restname">{{ thebranches[0].name }}</h1>
+                <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full" :class="rest.style.logos">
+                <h1 :class="rest.style.restname" class="rs-restname">{{ rest.name }}</h1>
             </div>
             <!--NAVIGATION-->
             <section ref="navigationEl">
@@ -277,18 +250,18 @@ onMounted(() => {
 
                     <button alt="Cambiar tamaño de texto" title="Tamaño de texto"
                         class="flex items-center gap-1 font-bold p-2 shadow-md rounded cursor-pointer rs-navBtn"
-                        @click="fontsizer()" :class="[thestyles.navBtn]">
+                        @click="fontsizer()" :class="[rest.style.navBtn]">
                         <Icon name="solar:list-arrow-up-bold-duotone" v-show="!isFontSize" />
                         <Icon name="solar:list-arrow-down-bold-duotone" v-show="isFontSize" />
                     </button>
                     <button alt="Compartir" title="Compartir" v-show="isSupported"
                         class="flex items-center gap-1 font-bold p-2 shadow-md rounded cursor-pointer rs-navBtn"
-                        @click="shareit()" :class="thestyles.navBtn">
+                        @click="shareit()" :class="rest.style.navBtn">
                         <Icon name="solar:share-circle-bold-duotone" />
                     </button>
                     <button alt="Menú" title="Menú" @click="openNavView" ref="navBtnEl"
                         class="flex items-center gap-1 font-bold ml-auto p-2 shadow-md rounded top-1 right-1 z-20 cursor-pointer rs-navBtn"
-                        :class="thestyles.navBtn">
+                        :class="rest.style.navBtn">
                         <Icon name="solar:documents-bold-duotone" />
                         Menú
                     </button>
@@ -297,35 +270,33 @@ onMounted(() => {
 
                 <div ref="navviewEl" v-show="navView"
                     class="fixed top-0 left-4 right-4 bottom-4 z-50 rounded-b shadow-2xl p-5 flex flex-col rs-navBg"
-                    :class="thestyles.navBg">
+                    :class="rest.style.navBg">
                     <div class="text-center" @click="selectNavActive(99)">
-                        <img :src="thelogo" :alt="rest.name" class="mx-auto w-full rs-logoNav"
-                            :class="thestyles.logoNav">
+                        <img :src="rest.logoNav" :alt="rest.name" class="mx-auto w-full rs-logoNav"
+                            :class="rest.style.logoNav">
                     </div>
                     <div class="overflow-y-auto w-full h-full flex flex-col items-start justify-evenly p-2 gap-5">
-                        <div v-for="(item, index) in menu_render" class="cursor-pointer"
+                        <div v-for="(item, index) in rest.menu" class="cursor-pointer"
                             :class="[navActive == index ? '' : '']" @click="selectNavActive(index)">
                             <span class="rs-navAll rs-navActive rs-navInactive"
-                                :class="[thestyles.navAll, navActive == index ? thestyles.navActive : thestyles.navInactive]">
+                                :class="[rest.style.navAll, navActive == index ? rest.style.navActive : rest.style.navInactive]">
                                 {{ item.name.toUpperCase() }}
                             </span>
                         </div>
                     </div>
                     <button @click="closeNavView"
                         class=" flex items-center gap-2 mx-auto  font-bold   p-2 shadow-md rounded  cursor-pointer rs-navBtnClose"
-                        :class="thestyles.navBtnClose">
+                        :class="rest.style.navBtnClose">
                         <Icon name="solar:documents-bold-duotone" />
                         Cerrar
                     </button>
                 </div>
             </section>
 
-            <MenuAreas :areas="menu_areas" :styles="thestyles" v-model="selected_area" />
 
-            <!-- THE MENU -->
+            <!-- MENU -->
             <section class="py-5" :class="[navView ? 'pointer-events-none' : '']">
-                <div v-for="(cat, cat_index) in menu_render" class="categorysection" :id="`cat_${cat_index}`"
-                    v-auto-animate>
+                <div v-for="(cat, cat_index) in rest.menu" class="categorysection" :id="`cat_${cat_index}`">
 
 
                     <!--CATEGORY-->
@@ -335,57 +306,45 @@ onMounted(() => {
                             :class="`aspect-[580/320] bg-cover bg-center w-full bg-[url(${pho})]`"></div>
                     </div>
 
-
-                    <div :class="thestyles.catName" class="rs-catName">
+                    <div :class="rest.style.catName" class="rs-catName">
                         <h2 class="w-2/3">{{ cat.name.toUpperCase() }}</h2>
                     </div>
-                    <div v-if="cat.description" class="rs-catDescription" :class="thestyles.catDescription"
-                        v-auto-animate>{{
-                            cat.description.toUpperCase() }}
+                    <div v-if="cat.description" class="rs-catDescription" :class="rest.style.catDescription">{{
+                        cat.description.toUpperCase() }}
                     </div>
 
                     <!--ARTICLE-->
-                    <article v-for="(plat, plat_index) in cat.list" :class="thestyles.articleWrapper" v-auto-animate
+                    <article v-for="(plat, plat_index) in cat.list" :class="rest.style.articleWrapper"
                         class="rs-articleWrapper">
 
                         <div v-if="plat.photo"
                             :class="`aspect-[580/320] bg-cover bg-center  bg-[url(${plat.photo[1]})]`">
                         </div>
 
-                        <div class="flex rs-articleInner" :class="thestyles.articleInner">
+                        <div class="flex rs-articleInner" :class="rest.style.articleInner">
                             <div class="w-3/6 p-2 shrink-0">
-                                <div class="rs-articleName" :class="thestyles.articleName">{{ plat.name }}</div>
-                                <div class="rs-articleDescription" :class="thestyles.articleDescription"
-                                    v-html="plat.description"></div>
+                                <div class="rs-articleName" :class="rest.style.articleName">{{ plat.name }}</div>
+                                <div class="rs-articleDescription" :class="rest.style.articleDescription">{{
+                                    plat.description }}</div>
                             </div>
                             <div class="grow flex flex-col gap-4 text-white p-2 justify-evenly rs-articleVariantBg"
-                                :class="thestyles.articleVariantBg">
-
-                                <div class="flex gap-2 text-right " v-for="(variant, variant_index ) in plat.variants"
-                                    v-if="plat.variants">
+                                :class="rest.style.articleVariantBg">
+                                <div class="flex gap-2 text-right " v-for="(variant, variant_index ) in plat.variants">
                                     <div class="shrink-0" :class="isFontSize ? 'w-1/2' : 'w-4/6'">
-                                        <div :class="thestyles.articleVariantName" class="rs-articleVariantName">{{
+                                        <div :class="rest.style.articleVariantName" class="rs-articleVariantName">{{
                                             variant.name }}</div>
-                                        <div :class="thestyles.articleVariantDescription"
+                                        <div :class="rest.style.articleVariantDescription"
                                             class="rs-articleVariantDescription">{{ variant.description }}
                                         </div>
                                     </div>
                                     <div class="text-right grow rs-articleVariantPrice"
-                                        :class="thestyles.articleVariantPrice">
+                                        :class="rest.style.articleVariantPrice">
                                         {{ formatCurrency(variant.price) }}
                                     </div>
                                 </div>
-                                <!--simple dish-->
-                                <div v-else>
-                                    <div class="text-right grow rs-articleVariantPrice"
-                                        :class="thestyles.articleVariantPrice">
-                                        {{ formatCurrency(plat.price) }}
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
-                        <div v-if="plat.information" :class="thestyles.articleInfo" class="rs-articleInfo">{{
+                        <div v-if="plat.information" :class="rest.style.articleInfo" class="rs-articleInfo">{{
                             plat.information }}</div>
                     </article>
 
@@ -393,13 +352,9 @@ onMounted(() => {
                 </div> <!-- vfor -->
             </section> <!--/menu-->
 
-
-
-
-
             <div class="flex flex-wrap items-start justify-center p-2 gap-x-5 gap-y-2">
-                <div v-for="(item, index) in menu_render" class="cursor-pointer rs-navFooterAll"
-                    :class="thestyles.navFooterAll" @click="selectNavActive(index)">
+                <div v-for="(item, index) in rest.menu" class="cursor-pointer rs-navFooterAll"
+                    :class="rest.style.navFooterAll" @click="selectNavActive(index)">
                     {{ item.name.toUpperCase() }}
                 </div>
             </div>
@@ -408,36 +363,35 @@ onMounted(() => {
 
 
 
-                <div :class="thestyles.legals" class="rs-legals">{{ thebranches[0].legals }}</div>
+                <div :class="rest.style.legals" class="rs-legals">{{ rest.legals }}</div>
 
                 <!-- LOGO -->
                 <div class="text-center p-5">
-                    <img :src="thelogo" :alt="rest.name" class="mx-auto w-full rs-logos" :class="thestyles.logos">
+                    <img :src="rest.logo" :alt="rest.name" class="mx-auto w-full rs-logos" :class="rest.style.logos">
                 </div>
 
-                <div v-if="thebranches[0].message" :class="thestyles.message" class="rs-Message"
-                    v-html="thebranches[0].message" />
+                <div v-if="rest.message" :class="rest.style.message" class="rs-Message" v-html="rest.message" />
 
 
                 <div class="flex gap-2 flex-wrap justify-center items-center">
-                    <a v-for="(phone, index) in thebranches[0].phone" :href="`tel:${phone}`"
-                        class="rs-phones flex items-center gap-2 justify-center" :class="thestyles.phones">
+                    <a v-for="(phone, index) in rest.phones" :href="`tel:${phone}`"
+                        class="rs-phones flex items-center gap-2 justify-center" :class="rest.style.phones">
                         <Icon name="solar:phone-calling-line-duotone" class="text-xl" />
                         {{ phone }}
                     </a>
                 </div>
                 <div>
-                    <a v-if="thebranches[0].addressLink" :href="thebranches[0].addressLink" target="_blank"
-                        :class="thestyles.address" class="rs-address flex justify-center items-center gap-2">
+                    <a v-if="rest.addressLink" :href="rest.addressLink" target="_blank" :class="rest.style.address"
+                        class="rs-address flex justify-center items-center gap-2">
                         <Icon name="solar:map-point-linear" class="text-xl" />
-                        <div>{{ thebranches[0].address }}</div>
+                        <div>{{ rest.address }}</div>
                     </a>
-                    <div v-else :class="thestyles.address" class="rs-address">{{ thebranches[0].address }}</div>
+                    <div v-else :class="rest.style.address" class="rs-address">{{ rest.address }}</div>
                 </div>
 
                 <div class="flex gap-5 flex-wrap justify-center items-center text-3xl">
                     <a v-if="rest.social" v-for="(url, index) in rest.social" :href="url" class="rs-social"
-                        :class="thestyles.social">
+                        :class="rest.style.social">
 
                         <Icon name="logos:facebook" v-if="url.includes('facebook')" />
                         <Icon name="logos:instagram-icon" v-if="url.includes('instagram')" />
