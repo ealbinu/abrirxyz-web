@@ -81,7 +81,7 @@ export const useMenu = defineStore('menuStore', {
         this.thedata.menu.menu[cat].list[plat].variants[variant].qty = qty
       } else {
         this.thedata.menu.menu[cat].list[plat].qty = qty
-        console.log(this.thedata.menu.menu[cat].list[plat].qty)
+
       }
     }
   }

@@ -124,71 +124,50 @@ const closeSidebar = () => {
 }
 
 
-const totalSum = computed(() => {
-    let thesum = 0
-
-    filteredMenu.value.forEach(category => {
-        category.list.forEach(plat => {
-            if (plat?.variants && plat?.variants.length) {
-                plat.variants.forEach(variation => {
-                    thesum += variation.total
-                })
-            } else {
-                //simple
-                thesum += plat.total
-            }
-        })
-    })
-    return thesum
-})
-
-
 
 
 const filteredMenu = computed(() => {
-    // Reinicia totalSum al calcular el menú filtrado
-    const menuData = JSON.parse(JSON.stringify(menuStore.thedata.menu.menu))
+    const menuData = JSON.parse(JSON.stringify(menuStore.thedata.menu.menu));
 
-    let thefiltered = menuData.map(category => {
+    return menuData.map(category => {
         return {
             ...category,
             list: category.list.map(item => {
-                // Filtramos los variants que tengan qty mayor a 0 y añadimos total
                 const filteredVariants = item.variants?.filter(variant => variant.qty > 0)
-                    .map(variant => {
-                        const variantTotal = variant.price * variant.qty;
-                        //totalSum.value += variantTotal;
-                        return {
-                            ...variant,
-                            total: variantTotal
-                        }
-                    }) || [];
-
-
+                    .map(variant => ({
+                        ...variant,
+                        total: variant.price * variant.qty
+                    })) || [];
 
                 if (filteredVariants.length > 0) {
                     return {
                         ...item,
                         variants: filteredVariants,
-                        total: filteredVariants.reduce((acc, variant) => acc + variant.total, 0) // Suma total de los variants
-                    }
-                }
-
-                if (item.qty > 0) {
-                    const itemTotal = item.price * item.qty;
-                    totalSum.value += itemTotal; // Sumar total del item principal
-                    return {
-                        ...item,
-                        total: itemTotal
+                        total: filteredVariants.reduce((acc, variant) => acc + variant.total, 0)
                     };
                 }
 
-                return null; // Si no hay qty, retorna null
-            }).filter(Boolean) // Eliminamos cualquier elemento nulo
-        }
-    }).filter(category => category.list.length > 0) // Eliminamos categorías vacías
-    return thefiltered
+                if (item.qty > 0) {
+                    return {
+                        ...item,
+                        total: item.price * item.qty
+                    };
+                }
+
+                return null;
+            }).filter(Boolean)
+        };
+    }).filter(category => category.list.length > 0);
 });
+
+// Compute totalSum based on filteredMenu
+const totalSum = computed(() => {
+    return filteredMenu.value.reduce((categoryAcc, category) => {
+        return categoryAcc + category.list.reduce((itemAcc, item) => itemAcc + item.total, 0);
+    }, 0);
+});
+
+
 
 
 

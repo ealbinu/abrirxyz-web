@@ -144,7 +144,7 @@ onMounted(() => {
 
 
             <div class="my-5 text-center w-full" v-if="menuStore.whatsOrderOn">
-                <div @click="menuStore.setWhatsSidebar(true)"
+                <div @click="menuStore.setSidebar2(true)"
                     class="bg-green-600 text-white rounded-full w-fit mx-auto px-4 py-2 text-xl flex gap-2 items-center cursor-pointer hover:bg-white hover:text-green-600">
                     <span>
                         ¿Has terminado? Revisa tu orden
@@ -210,11 +210,16 @@ onMounted(() => {
         </div>
     </div>
 
-
-    <div v-show="false">
-        <Icon name="mingcute:minus-circle-line" class="text-xl" />
-        <Icon name="mingcute:add-circle-line" class=" text-xl" />
-        <Icon name="mingcute:close-fill" class="menu-btn-icon" />
+    <div class="opacity-50 text-[1px]">
+        <Icon name="mingcute:minus-circle-line" />
+        <Icon name="mingcute:add-circle-line" />
+        <Icon name="mingcute:close-fill" />
+        <Icon name="mingcute:paper-line" />
+        <Icon name="mingcute:arrows-down-fill" />
+        <Icon name="mingcute:arrows-up-fill" />
+        <Icon name="mingcute:share-forward-fill" />
+        <Icon name="mingcute:font-size-line" />
+        <Icon name="mingcute:font-size-fill" />
     </div>
 
 </template>
